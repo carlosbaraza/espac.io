@@ -1,11 +1,12 @@
 export function initCanvas() {
   const canvas = document.getElementById('glCanvas');
-  resizeCanvas(canvas);
-  window.addEventListener('resize', resizeCanvas.bind(null, canvas));
 
   // Initialize the GL context
   const gl = initWebGL(canvas);
   window.gl = gl;
+
+  resizeCanvas(canvas, gl);
+  window.addEventListener('resize', resizeCanvas.bind(null, canvas, gl));
 
   // Only continue if WebGL is available and working
   if (!gl) {
@@ -22,9 +23,10 @@ export function initCanvas() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 }
 
-function resizeCanvas(canvas) {
+function resizeCanvas(canvas, gl) {
   canvas.height = window.innerHeight;
   canvas.width = window.innerWidth;
+  gl.viewport(0, 0, canvas.width, canvas.height);
 }
 
 function initWebGL(canvas) {
